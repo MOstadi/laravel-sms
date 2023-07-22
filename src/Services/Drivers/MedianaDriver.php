@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\SMS;
+namespace Amiriun\SMS\Services\Drivers;
 
 use Amiriun\SMS\Services\Drivers\AbstractDriver;
 use Amiriun\SMS\DataContracts\DeliverSMSDTO;
