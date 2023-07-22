@@ -1,13 +1,14 @@
 <?php
 
-namespace Amiriun\SMS\Services\Drivers;
+namespace App\Services\SMS;
 
-
+use Amiriun\SMS\Services\Drivers\AbstractDriver;
 use Amiriun\SMS\DataContracts\DeliverSMSDTO;
 use Amiriun\SMS\DataContracts\SendSMSDTO;
 use Amiriun\SMS\DataContracts\SentSMSOutputDTO;
 use Amiriun\SMS\Exceptions\DeliverSMSException;
 use Amiriun\SMS\Repositories\StoreSMSDataRepository;
+use Amiriun\SMS\Services\Drivers\DriverState;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Events\NotificationFailed;
@@ -43,7 +44,7 @@ class MedianaDriver extends AbstractDriver
                 $DTO->message
             );
             $result = $client->getMessage($bulkId);
-            $this->prepareResponseDTO($result, $DTO);
+            return $this->prepareResponseDTO($result, $DTO);
         } catch (\Exception $e) {
             event(new NotificationFailed($DTO, new Notification(), $this, [
                 'error' => $e->getMessage(),
@@ -69,12 +70,13 @@ class MedianaDriver extends AbstractDriver
             $bulkId = $client->sendPattern(
                 $DTO->template,
                 $DTO->senderNumber,
-                [$DTO->to],
+                $DTO->to,
                 $DTO->message
             );
             $result = $client->getMessage($bulkId);
-            $this->prepareResponseDTO($result, $DTO);
+            return $this->prepareResponseDTO($result, $DTO);
         } catch (\Exception $e) {
+            report($e);
             event(new NotificationFailed($DTO, new Notification(), $this, [
                 'error' => $e->getMessage(),
                 'data' => serialize($DTO),
