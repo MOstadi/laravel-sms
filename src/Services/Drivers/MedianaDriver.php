@@ -2,7 +2,6 @@
 
 namespace Amiriun\SMS\Services\Drivers;
 
-use Amiriun\SMS\Services\Drivers\AbstractDriver;
 use Amiriun\SMS\DataContracts\DeliverSMSDTO;
 use Amiriun\SMS\DataContracts\SendSMSDTO;
 use Amiriun\SMS\DataContracts\SentSMSOutputDTO;
